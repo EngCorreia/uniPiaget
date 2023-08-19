@@ -3,9 +3,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unipiaget/ui_widgets/money_student/money_student.dart';
+import 'package:unipiaget/ui_widgets/student/student.dart';
 
+import '../home_page/home_page.dart';
 import '../inscricao/inscricao.dart';
+import '../notification/notifications.dart';
 import 'dashboard.dart';
 
 
@@ -16,51 +21,26 @@ class MenuWidgets extends StatefulWidget {
 }
 
 class _MenuWidgetsState extends State<MenuWidgets> {
-  int _current = 0;
+
+  int _selectedIndex = 0;
+  late List<Widget> firstFlowPagesList = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    firstFlowPagesList.clear();
+    firstFlowPagesList
+      ..add(const HomePage())
+      ..add(const StudentInformation())
+      ..add(const MoneyStudent())
+      ..add(const NotificationUi());
 
   }
 
 
   @override
   Widget build(context) {
-    final List<Widget> imageSliders = imgList.map((item) => Container(
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(5.0),
-        ),
-        child: Stack(
-          children: [
-            Image.asset(item,
-              fit: BoxFit.cover,
-              width: 1000,
-            ),
-            Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
-                ),
-                child: Text(' ${imgList.indexOf(item) +1} Imagem',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    )).toList();
+
 
     return Scaffold(
       appBar: AppBar(
@@ -244,7 +224,7 @@ class _MenuWidgetsState extends State<MenuWidgets> {
               ),
             ),
             child: const Icon(FontAwesomeIcons.powerOff, color: Colors.red, size: 20,),
-            labelStyle: TextStyle(color: Colors.blue),
+            labelStyle: const TextStyle(color: Colors.blue),
             onTap: (){
              // Navigator.push(context, MaterialPageRoute(builder: (context)=> const Teachers()));
             },
@@ -368,185 +348,84 @@ class _MenuWidgetsState extends State<MenuWidgets> {
         ],
       ),
 
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            CarouselSlider(
-              items: imageSliders,
-              options: CarouselOptions(
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  aspectRatio: 2.0,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _current = index;
-                    });
-                  }),
-            ),
+      body: Center(
+        child: firstFlowPagesList.elementAt(_selectedIndex),
+      ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: imgList.map((url) {
-                int index = imgList.indexOf(url);
-                return Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 3,
-                  ),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _current == index ? const Color.fromRGBO(0, 0, 0, 0.9) : const Color.fromRGBO(0, 0, 0, 0.4),
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              rippleColor: Colors.grey[300]!,
+              hoverColor: Colors.grey[100]!,
+              gap: 8,
+              activeColor: Colors.orange[900],
+              iconSize: 24,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              duration: const Duration(milliseconds: 400),
+              tabBackgroundColor: Colors.grey[100]!,
+              color: Colors.black54,
+              tabs: [
 
-            GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 4.0,
-                  mainAxisSpacing: 4.0,
-                  mainAxisExtent: 160),
-
-              itemBuilder: (_, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Center(
-                    child: Container(
-                      width: 140,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            blurRadius: 1,
-                            spreadRadius: 1,
-                            // offset: const Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      child: dashboardList(index),
-                    ),
-                  ),
-                );
-              },
-              itemCount: dashboard.length,
-            ),
-
-            const SizedBox(height: 25.0),
-
-            GestureDetector(
-              onTap: () async {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> const NovaMatricula()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8,left: 90,right: 90,bottom: 5),
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(25),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black,
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                        // offset: const Offset(2, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Center(
-                    child: Text("Listar cursos",style: TextStyle(
-
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white
-                    ),),
+                GButton(
+                  icon: Icons.home_rounded,
+                  text: 'Menu',
+                  iconSize: 20,
+                  textStyle: TextStyle(
+                      color: Colors.orange[900]
                   ),
                 ),
-              ),
+
+                GButton(
+                  icon: FontAwesomeIcons.graduationCap,
+                  text: 'Aluno',
+                  iconSize: 20,
+                  textStyle: TextStyle(
+
+                      color: Colors.orange[900]
+                  ),
+                ),
+
+                GButton(
+                  icon: FontAwesomeIcons.moneyBillAlt,
+                  text: 'Finança',
+                  iconSize: 20,
+                  textStyle: TextStyle(
+                      color: Colors.orange[900]
+                  ),
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.bell,
+                  iconSize: 20,
+                  text: 'Alertas',
+                  textStyle: TextStyle(
+                      color: Colors.orange[900]
+                  ),
+                ),
+
+              ],
+
+              selectedIndex: _selectedIndex,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+
             ),
-
-            const SizedBox(height: 25.0),
-
-          ],
+          ),
         ),
       ),
     );
   }
-
-  final List<Dashboard> dashboard = [
-    Dashboard(
-        image: "assets/images/education.png",
-        tittle: "Professores",
-        subTittle: "25 Professores"
-    ),
-
-    Dashboard(
-        image: "assets/images/school.png",
-        tittle: "Salas de aula",
-        subTittle: "30 salas de aulas"
-    ),
-
-    Dashboard(
-        image: "assets/images/books.png",
-        tittle: "Calendario",
-        subTittle: "Ver calendario"
-    ),
-
-    Dashboard(
-        image: "assets/images/readingbook.png",
-        tittle: "Classes",
-        subTittle: "Listagem de classes"
-    ),
-
-  ];
-
-  final List<String> imgList = [
-    'assets/images/education.png',
-    'assets/images/education.png',
-    'assets/images/education.png',
-  ];
-
-  dashboardList(int index){
-    return GestureDetector(
-      onTap: (){
-        if(index == 0){
-         // Navigator.push(context, MaterialPageRoute(builder: (context)=> const Teachers()));
-        }
-      },
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          SizedBox(
-              height: 70,
-              child: Image.asset(dashboard[index].image)),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(dashboard[index].tittle,style: TextStyle(
-              fontWeight: FontWeight.bold
-          ),),
-
-          Text(dashboard[index].subTittle,style: TextStyle(
-              fontWeight: FontWeight.normal
-          ),),
-        ],
-      ),
-    );
-  }
-
 }
