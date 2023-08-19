@@ -97,17 +97,17 @@ class _HomePageState extends State<HomePage> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+                  crossAxisCount: 2,
                   crossAxisSpacing: 4.0,
                   mainAxisSpacing: 4.0,
-                  mainAxisExtent: 160),
+                  mainAxisExtent: 150),
 
               itemBuilder: (_, index) {
                 return Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Center(
                     child: Container(
-                      width: 140,
+                      width: 200,
                       height: 250,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -178,13 +178,13 @@ class _HomePageState extends State<HomePage> {
     ),
 
     Dashboard(
-        image: "assets/images/school.png",
-        tittle: "Salas de aula",
-        subTittle: "30 salas de aulas"
+        image: "assets/menus/achados.jpeg",
+        tittle: "Perdido e achado",
+        subTittle: "Saiba mais"
     ),
 
     Dashboard(
-        image: "assets/images/books.png",
+        image: "assets/menus/calendarios.png",
         tittle: "Calendario",
         subTittle: "Ver calendario"
     ),
