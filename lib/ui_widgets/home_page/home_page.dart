@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
+import '../faculdade/faculdades.dart';
 import '../inscricao/inscricao.dart';
 import '../menu/dashboard.dart';
 
@@ -189,9 +190,9 @@ class _HomePageState extends State<HomePage> {
     ),
 
     Dashboard(
-        image: "assets/images/readingbook.png",
-        tittle: "Classes",
-        subTittle: "Listagem de classes"
+        image: "assets/menus/alunos.png",
+        tittle: "Faculdade",
+        subTittle: "Saiba mais"
     ),
 
   ];
@@ -205,9 +206,9 @@ class _HomePageState extends State<HomePage> {
   dashboardList(int index){
     return GestureDetector(
       onTap: (){
-        if(index == 0){
-          // Navigator.push(context, MaterialPageRoute(builder: (context)=> const Teachers()));
-        }
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context)=>
+                  Faculdades(dashboard: dashboard[index])));
       },
       child: Column(
         children: [
@@ -220,11 +221,11 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 10,
           ),
-          Text(dashboard[index].tittle,style: TextStyle(
+          Text(dashboard[index].tittle,style: const TextStyle(
               fontWeight: FontWeight.bold
           ),),
 
-          Text(dashboard[index].subTittle,style: TextStyle(
+          Text(dashboard[index].subTittle,style: const TextStyle(
               fontWeight: FontWeight.normal
           ),),
         ],
